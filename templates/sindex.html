@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Bookshelf
+{% endblock %}
+{% block nav %}
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMenu">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item custom-nav">
+                <a href="{{url_for('index')}}" class="nav-link active">{{username}}</a>
+            </li>
+            <li class="nav-item custom-nav">
+                <a href="{{url_for('logout')}}" class="nav-link">logout</a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+{% block body %}
+<div class="col next">
+	<div align="center">
+		<br>
+        <form method="POST" action="{{url_for('query')}}">
+        <div class="form-inline my-2 my-lg-0" style="display: inline-block;">
+            <div class="form-group">
+                <input type="text" name="query" class="form-control mr-sm-2" placeholder="search" style="float: left;" required>
+                <button class="btn btn-primary my-2 my-sm-0">search</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+<br>
+    {% if searchquery == "Initial" %}
+        <br>
+    {% elif searchquery != "Nothing Found" %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">ISBN</th>
+                    <th scope="col">TITLE</th>
+                    <th scope="col">AUTHOR</th>
+                    <th scope="col">YEAR</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in searchquery %}
+                <tr>
+                    <th scope="row"><a href="{{ url_for('book',isbn= row[0]) }}">{{row[0]}}</a></th>
+                    <td><a href="{{ url_for('book',isbn= row[0]) }}">{{row[1]}}</a></td>
+                    <td><a href="{{ url_for('book',isbn= row[0]) }}">{{row[2]}}</a></td>
+                    <td><a href="{{ url_for('book',isbn= row[0]) }}">{{row[3]}}</a></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        {{searchquery}}
+    {% endif %}
+{% endblock %}

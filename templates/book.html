@@ -1,0 +1,77 @@
+{% extends 'layout.html' %}
+{% block title %}
+Bookshelf
+{% endblock %}
+{% block nav %}
+<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
+        <span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarMenu">
+	<ul class="navbar-nav ml-auto">
+        <li class="nav-item custom-nav">
+            <a href="{{url_for('index')}}" class="nav-link active">{{username}}</a>
+        </li>
+        <li class="nav-item custom-nav">
+            <a href="{{url_for('logout')}}" class="nav-link">logout</a>
+        </li>
+	</ul>
+</div>
+{% endblock %}
+{% block body %}
+<div class="next">
+	<div class="card text-center">
+  <div class="card-header">
+    ISBN: {{var[0].isbn}}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{var[0].title}}</h5>
+    <p class="card-text">{{var[0].author}}</p>
+    <h5 class="card-text">Goodread Ratings:</h5>
+    <p class="card-text">Ratings Count: {{res["books"][0]["ratings_count"]}}</p>
+    <p class="card-text">Average Rating: {{res["books"][0]["average_rating"]}}</p>
+  </div>
+  <div class="card-footer text-muted">
+    Published year: {{var[0].year}}
+  </div>
+</div>
+</div>
+<br>
+{% if not review  %}
+<h5 class="col" align="center"> Your Review</h5><br>
+<form class="col" method="POST" action="{{url_for('book',isbn=var[0][0])}}">
+        <div class="form-group">
+        	<select class="custom-select" name="rating">your rating
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+       
+        </div>
+		<div class="form-group">
+            <textarea  class="form-control" name="userreview" placeholder="Your Thoughts on Book"></textarea>
+        </div>
+        <div class="form-group" align="center">
+        	<button type="submit" class="btn btn-primary">SUBMIT</button>
+    	</div>
+</form>
+<br>
+{% endif %}
+{% if reviews %}
+{% for rev in reviews %}
+<div class="col">
+<div class="card border-dark">
+  <div class="card-header">
+    <h5>{{rev.username|capitalize}}</h5>
+  </div>
+  <div class="card-body text-dark">
+    <p class="card-text">{{rev.review}}</p>
+    <p class="card-text">Rating: {{rev.rating}}</p>
+  </div>
+</div>
+</div>
+<br>
+{% endfor %}
+{% endif %}
+{% endblock %}
